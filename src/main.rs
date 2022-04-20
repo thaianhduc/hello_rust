@@ -5,6 +5,59 @@ use std::cmp::Ordering;
 fn main() {
     println!("Hello, Rust!");
 
+    let mut counter = 0;
+
+    let result = loop {
+        counter += 1;
+
+        if counter == 10 {
+            break counter * 2;
+        }
+    };
+    println!("The result is {}", result);
+
+    let some_string = Some("Hello Option");
+    match some_string{
+        Some(v) => println!("Some: {}", v),
+        None => println!("Not gonna happen!")
+    }
+
+    let learn = LearnRust::RandomGame;
+
+    execute(learn);
+
+    let learn = LearnRust::Option(10);
+    execute(learn);
+}
+
+fn execute(learn: LearnRust)
+{
+    match learn {
+        LearnRust::RandomGame => random_game(),
+        LearnRust::Option(start) => {
+            let plusone = plus_one(Some::<i32>(start));
+            match plusone {
+                None => println!("Nothing there"),
+                Some(value) => println!("Plus one equals: {}", value)
+            }
+        }
+    };
+}
+
+fn plus_one(x: Option<i32>) -> Option<i32>{
+    match x {
+        None => None,
+        Some(i) => Some(i+1)
+    }
+}
+
+enum LearnRust {
+    RandomGame,
+    Option(i32),
+}
+
+fn random_game()
+{
     let secret_number: u32 = rand::thread_rng().gen_range(1..101);
     println!("Super secret number is {}", secret_number);
 
@@ -22,6 +75,7 @@ fn main() {
 
         println!("Your guess: {}", guess);
 
+        // Use the "match" pattern. The parse method returns an enumeration of Ok or Err
         let guess: u32 = match guess.trim().parse() {
             Ok(number) => number,
             Err(_) => {
